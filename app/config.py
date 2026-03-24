@@ -1,0 +1,17 @@
+import os
+
+DATA_PATH="data"
+
+VECTOR_PATH="vector_store"
+
+CHUNK_SIZE=500
+
+CHUNK_OVERLAP=100
+
+EMBEDDING_MODEL="all-MiniLM-L6-v2"
+
+LLM_MODEL="llama-3.1-8b-instant"
+
+TOP_K=5
+
+SIMILARITY_THRESHOLD=1.5
