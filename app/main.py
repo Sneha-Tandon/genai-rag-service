@@ -107,7 +107,6 @@ def query_rag(request:QueryRequest):
 
     answer,chunks=rag_query(
         request.question,
-        request.session_id
     )
 
     logger.info(f"Query received: {request.question}")
