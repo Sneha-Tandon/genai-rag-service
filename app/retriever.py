@@ -18,11 +18,8 @@ def retrieve_chunks(query,top_k=5):
 
     results=[]
 
-    for distance,i in zip(distances[0],indices[0]):
+    for i in indices[0]:
 
-        # similarity threshold (lower distance = better match)
-        if distance < 1.5:
-
-            results.append(chunks[i])
+        results.append(chunks[i])
 
     return results

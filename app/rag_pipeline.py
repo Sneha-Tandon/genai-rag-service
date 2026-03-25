@@ -1,11 +1,13 @@
-from app.retriever import retrieve_chunks
-from app.llm import generate_answer
 from app.logger import logger
 
 
 def rag_query(question):
 
     try:
+
+        # Lazy imports (important for Render memory)
+        from app.retriever import retrieve_chunks
+        from app.llm import generate_answer
 
         logger.info(f"Query received: {question}")
 
@@ -15,18 +17,16 @@ def rag_query(question):
 
         if len(chunks)==0:
 
-            logger.warning("No relevant chunks found")
-
             return "No relevant information found",[]
 
         answer=generate_answer(question,chunks)
 
-        logger.info("Answer generated successfully")
+        logger.info("Answer generated")
 
         return answer,chunks
 
     except Exception as e:
 
-        logger.error(f"RAG error: {str(e)}")
+        logger.error(str(e))
 
         return str(e),[]
