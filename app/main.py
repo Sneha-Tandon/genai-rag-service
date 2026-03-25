@@ -11,7 +11,7 @@ from app.document_loader import load_pdf
 from app.embeddings import create_embeddings
 from app.vector_store import store_vectors, load_vector_store
 from app.logger import logger
-from app.schemas import QueryRequest, QueryResponse
+from app.schemas import QueryRequest, QueryResponse, ChatRequest, ChatResponse
 
 UPLOAD_DIR="data"
 
