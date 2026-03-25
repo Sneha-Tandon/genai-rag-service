@@ -6,7 +6,7 @@ import shutil
 import os
 
 from app.chunking import create_chunks
-from app.loader import load_pdf
+from app.document_loader import load_pdf
 from app.embeddings import create_embeddings
 from app.vector_store import store_vectors
 from app.logger import logger
