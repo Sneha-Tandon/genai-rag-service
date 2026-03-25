@@ -122,3 +122,57 @@ def query_rag(request:QueryRequest):
         "chunks_used":len(chunks)
 
     }
+
+@app.post("/chat",response_model=ChatResponse)
+
+def chat(request:ChatRequest):
+
+    from app.rag_pipeline import rag_query
+
+    start=time.time()
+
+    answer,chunks=rag_query(
+        request.question,
+        request.session_id
+    )
+
+    logger.info(f"Chat session: {request.session_id}")
+    logger.info(f"Response time: {time.time()-start}")
+
+    return {
+
+        "session_id":request.session_id,
+
+        "question":request.question,
+
+        "answer":answer,
+
+        "chunks_used":len(chunks)
+
+    }
+
+@app.get("/history/{session_id}")
+
+def history(session_id:str):
+
+    from app.memory import get_history
+
+    return {
+
+        "session_id":session_id,
+
+        "history":get_history(session_id)
+
+    }
+
+@app.get("/sessions")
+
+def sessions():
+
+    from app.memory import list_sessions
+
+    return {
+
+        "active_sessions":list_sessions()
+
+    }

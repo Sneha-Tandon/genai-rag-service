@@ -1,34 +1,43 @@
-sessions={}
+sessions = {}
 
 
 def get_history(session_id):
 
     if session_id not in sessions:
 
-        sessions[session_id]=[]
+        sessions[session_id] = []
 
     return sessions[session_id]
 
 
-def add_to_history(session_id,question,answer):
+def add_to_history(session_id, question, answer):
+
+    if session_id not in sessions:
+
+        sessions[session_id] = []
 
     sessions[session_id].append({
 
-        "question":question,
+        "question": question,
 
-        "answer":answer
+        "answer": answer
 
     })
 
 
-def get_context(session_id,limit=3):
+def get_context(session_id, limit=3):
 
-    history=sessions.get(session_id,[])
+    history = sessions.get(session_id, [])
 
-    context=""
+    context = ""
 
     for item in history[-limit:]:
 
-        context+=f"Q:{item['question']}\nA:{item['answer']}\n"
+        context += f"User: {item['question']}\nAssistant: {item['answer']}\n"
 
     return context
+
+
+def list_sessions():
+
+    return list(sessions.keys())

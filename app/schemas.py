@@ -1,14 +1,16 @@
 from pydantic import BaseModel
 
 
-class QueryRequest(BaseModel):
+class ChatRequest(BaseModel):
 
     question:str
 
-    session_id:str | None = None
+    session_id:str
 
 
-class QueryResponse(BaseModel):
+class ChatResponse(BaseModel):
+
+    session_id:str
 
     question:str
 
