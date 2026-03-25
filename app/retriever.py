@@ -12,14 +12,14 @@ def retrieve_chunks(query,top_k=5):
 
     query_embedding=model.encode([query])
 
-    query_embedding=np.array(query_embedding)
-
     distances,indices=index.search(query_embedding,top_k)
 
     results=[]
 
-    for i in indices[0]:
+    for score,i in zip(distances[0],indices[0]):
 
-        results.append(chunks[i])
+        if score<1.5:   
+
+            results.append(chunks[i])
 
     return results

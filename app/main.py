@@ -4,12 +4,14 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 from fastapi import FastAPI, UploadFile, File
 import shutil
 import os
+import time
 
 from app.chunking import create_chunks
 from app.document_loader import load_pdf
 from app.embeddings import create_embeddings
-from app.vector_store import store_vectors
+from app.vector_store import store_vectors, load_vector_store
 from app.logger import logger
+from app.schemas import QueryRequest, QueryResponse
 
 UPLOAD_DIR="data"
 
@@ -34,6 +36,34 @@ def health():
         "service":"rag-api"
 
     }
+
+
+@app.get("/metrics")
+def metrics():
+
+    try:
+
+        index,chunks=load_vector_store()
+
+        return {
+
+            "documents_indexed":len(chunks),
+
+            "vector_dimension":index.d,
+
+            "status":"running"
+
+        }
+
+    except:
+
+        return {
+
+            "documents_indexed":0,
+
+            "status":"no data"
+
+        }
 
 
 @app.post("/upload")
@@ -67,17 +97,25 @@ async def upload_file(file:UploadFile=File(...)):
     }
 
 
-@app.get("/query")
-def query_rag(question:str):
+@app.post("/query",response_model=QueryResponse)
 
-    # Import inside function to avoid startup loading
+def query_rag(request:QueryRequest):
+
     from app.rag_pipeline import rag_query
 
-    answer,chunks=rag_query(question)
+    start=time.time()
+
+    answer,chunks=rag_query(
+        request.question,
+        request.session_id
+    )
+
+    logger.info(f"Query received: {request.question}")
+    logger.info(f"Response time: {time.time()-start}")
 
     return {
 
-        "question":question,
+        "question":request.question,
 
         "answer":answer,
 
